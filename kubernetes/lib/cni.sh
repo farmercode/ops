@@ -6,6 +6,9 @@ set -o pipefail
 CONTAINER_CIDR=${CONTAINER_CIDR:-"10.244.1.0/24"}
 CNI_VERSION=${CNI_VERSION:-"v0.6.0"}
 
+LIB_ROOT=$(dirname "${BASH_SOURCE}")
+source $LIB_ROOT/util.sh
+
 install-flannel() {
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 }
@@ -56,7 +59,7 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
-    setenforce 0
+    safe_disable_selinux
     yum install -y kubernetes-cni
 }
 
