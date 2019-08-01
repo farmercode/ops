@@ -37,7 +37,7 @@ safe_mkdir() {
 
 safe_disable_selinux() {
     ret_enforce=`getenforce`
-    if [ $ret_enforce -ne "Disabled" ];then
+    if [ "$ret_enforce" -ne "Disabled" ];then
         setenforce 0
     fi
 }
