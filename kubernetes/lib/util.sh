@@ -28,3 +28,16 @@ lsb-dist() {
 command_exists() {
     command -v "$@" > /dev/null 2>&1
 }
+
+safe_mkdir() {
+    if [ !-d $1 ];then
+        mkdir -p $1
+    fi
+}
+
+safe_disable_selinux() {
+    ret_enforce=`getenforce`
+    if [ $ret_enforce -ne "Disabled" ];then
+        setenforce 0
+    fi
+}

@@ -14,7 +14,9 @@ source ${KUBERNTES_LIB_ROOT}/docker.sh
 source ${KUBERNTES_LIB_ROOT}/gvisor.sh
 
 setup-kubelet-infra-container-image() {
-    cat > /etc/systemd/system/kubelet.service.d/20-pod-infra-image.conf <<EOF
+    config_dir="/etc/systemd/system/kubelet.service.d"
+    safe_mkdir $config_dir
+    cat > $config_dir/20-pod-infra-image.conf <<EOF
 [Service]
 Environment="KUBELET_EXTRA_ARGS=--pod-infra-container-image=crproxy.trafficmanager.net:6000/google_containers/pause-amd64:3.1"
 EOF
@@ -32,7 +34,7 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
-    setenforce 0
+    safe_disable_selinux
     sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     yum install -y kubernetes-cni kubelet kubeadm kubectl
 }
@@ -47,7 +49,7 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-    setenforce 0
+    safe_disable_selinux
     sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     yum install -y kubernetes-cni kubelet kubeadm kubectl
     setup-kubelet-infra-container-image
