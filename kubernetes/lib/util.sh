@@ -30,7 +30,7 @@ command_exists() {
 }
 
 safe_mkdir() {
-    if [ !-d $1 ];then
+    if [ ! -d $1 ];then
         mkdir -p $1
     fi
 }
