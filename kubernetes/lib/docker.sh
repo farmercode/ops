@@ -11,7 +11,7 @@ docker-install-latest() {
 
 install-docker-ubuntu() {
     apt-get update
-    apt-get install -y docker-ce
+    apt-get install -y docker
     systemctl enable docker
     systemctl start docker
 }
